@@ -1,0 +1,69 @@
+/* ===== GRID BASE con variable de ancho ===== */
+/* ====== GRID BASE ====== */
+.shell{
+  display: grid;
+  grid-template-columns: 260px 1fr;   /* sidebar | contenido */
+  grid-template-rows: auto 1fr;       /* topbar | resto */
+  min-height: 100vh;
+  background: var(--app-bg, #f6f8fc);
+  transition: grid-template-columns .25s ease;
+}
+
+/* Sidebar se queda en su columna y se pega al top al hacer scroll */
+.sidebar{
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;         /* ocupa topbar + contenido */
+  position: sticky;
+  top: 0;
+  height: 100vh;           /* para scrollbar interno */
+  overflow-y: auto;
+  background: var(--sidebar-bg, #0f172a);
+  border-right: 1px solid var(--border);
+  z-index: 10;             /* por debajo del topbar si ese tuviera sombra */
+}
+
+/* Contenido principal */
+.main{
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Topbar va dentro de .main, no necesita fixed */
+.headline{ padding:18px 22px; background:#fff; border-bottom:1px solid var(--border) }
+.content{ padding:18px }
+
+/* ====== COLAPSABLE DESKTOP (icon-only) ====== */
+.collapsed{
+  grid-template-columns: 72px 1fr;    /* sidebar estrecho */
+}
+
+.show{   transform: translateX(0); }
+.hidden{ transform: translateX(-100%); }
+
+
+.headline h1{ margin:0; font-size:26px; font-weight:800 }
+.breadcrumb{ margin-top:8px; display:flex; gap:8px; font-size:13px; color:var(--muted) }
+.crumbActive{ background:#e9eefb; padding:6px 10px; border-radius:8px; color:#4b5563 }
+.crumb{ background:#eef2ff; padding:6px 10px; border-radius:8px; color:#6b7280 }
+
+
+/* ===== MÓVIL: el sidebar se vuelve overlay ===== */
+@media (max-width: 900px){
+  .shell{ grid-template-columns: 1fr; }    /* contenido a 100% */
+  .collapsed{ grid-template-columns: 1fr; }
+
+  .sidebar{
+    position: fixed; top: 0; left: 0;
+    width: 260px; height: 100vh;            /* ancho fijo solo en overlay */
+    z-index: 50;
+    box-shadow: none;
+  }
+  .show{
+    transform: translateX(0);
+    box-shadow: 0 0 0 9999px rgba(0,0,0,.35);   /* backdrop */
+  }
+  .hidden{ transform: translateX(-100%); }
+}

@@ -1,0 +1,8 @@
+.card {
+  width: 100%; max-width: 520px; padding: 26px;
+  background: rgba(255,255,255,.92); border: 1px solid var(--border, #e5e7eb);
+  border-radius: 20px; box-shadow: 0 20px 60px rgba(2,8,20,.08);
+  backdrop-filter: saturate(130%) blur(6px);
+}
+.title { margin: 0 0 12px; font-size: 22px }
+.actions { margin-top: 10px }
