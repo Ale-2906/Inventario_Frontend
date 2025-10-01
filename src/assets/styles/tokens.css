@@ -1,0 +1,22 @@
+:root{
+  /* Brand */
+  --brand-pink:#e1454a;      /* coral */
+  --brand-pink-2:#ff9f9f;
+  --brand-blue:#34c0ff;
+  --brand-teal:#2ad1b0;
+  --brand-purple:#7e6bff;
+  --brand-green:#31d17b;
+
+  /* UI */
+  --bg:#f5f7fb;
+  --sidebar-bg:#111827;  /* casi negro */
+  --sidebar-tint:rgba(255,255,255,.06);
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --shadow:0 20px 60px rgba(2,8,20,.08);
+}
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
