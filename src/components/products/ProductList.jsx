@@ -1,11 +1,11 @@
-import s from "../../pages/Products/Products.module.css"; 
+import s from "../../pages/Products/Products.module.css";
 import DataTable from "../../components/common/Datatable/DataTable";
 
 export default function ProductList({ products, stats, onEdit, onRemove }) {
   return (
     <div className="space-y-6">
       {/* KPIs */}
-    
+
 
       {/* Tabla de Productos */}
       <section className={s.panel}>
@@ -18,12 +18,12 @@ export default function ProductList({ products, stats, onEdit, onRemove }) {
 
         <DataTable
           columns={[
-            { key: "name", label: "Producto" },
-            { key: "category", label: "Categoría" },
-            { key: "price", label: "Precio", render: (r) => toMoney(r.price) },
+            { key: "nombre", label: "Producto" },
+            { key: "categoria_nombre", label: "Categoría" },
+            { key: "precio", label: "Precio", render: (r) => toMoney(r.precio) },
             { key: "stock", label: "Stock" },
-            { key: "supplier", label: "Proveedor" },
-            { key: "status", label: "Estado", render: (r) => <StatusPill status={r.status} /> },
+            { key: "proveedor_nombre", label: "Proveedor" },
+            { key: "estado", label: "Estado", render: (r) => <StatusPill status={r.estado} /> },
             {
               key: "actions",
               label: "Acciones",
@@ -61,7 +61,9 @@ export default function ProductList({ products, stats, onEdit, onRemove }) {
 }
 
 // Helper Functions
+// Helper Functions
 function toMoney(n) {
+  if (n === undefined || n === null) return "$0.00"; // <-- valor por defecto
   return n.toLocaleString("es-ES", {
     style: "currency",
     currency: "USD",
@@ -71,26 +73,24 @@ function toMoney(n) {
 
 function StatusPill({ status }) {
   const map = {
-    Activo: { bg: "#e8fff3", color: "#059669" },
-    "Stock bajo": { bg: "#fff7e6", color: "#b7791f" },
-    Agotado: { bg: "#ffe9ec", color: "#d23c52" },
+    1: { bg: "#e8fff3", color: "#059669", label: "Activo" },
+    0: { bg: "#ffe9ec", color: "#d23c52", label: "Inactivo" }
   };
-  const style = map[status] || { bg: "#f3f4f6", color: "#374151" };
+  const style = map[status] || { bg: "#f3f4f6", color: "#374151", label: "Desconocido" };
   return (
-    <span
-      style={{
-        background: style.bg,
-        color: style.color,
-        padding: "6px 10px",
-        borderRadius: 999,
-        fontSize: 12,
-        fontWeight: 700,
-        display: "inline-block",
-        minWidth: 72,
-        textAlign: "center",
-      }}
-    >
-      {status}
+    <span style={{
+      background: style.bg,
+      color: style.color,
+      padding: "6px 10px",
+      borderRadius: 999,
+      fontSize: 12,
+      fontWeight: 700,
+      display: "inline-block",
+      minWidth: 72,
+      textAlign: "center"
+    }}>
+      {style.label}
     </span>
   );
 }
+
