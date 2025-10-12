@@ -118,8 +118,8 @@ export default function Reports() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.headerTitle}>Reportes e Informes</h1>
-        <p className={styles.headerSubtitle}>Visualiza estadísticas y tendencias de tu inventario</p>
+        <h1 className={styles.headerTitle}>Reportes de Gestión</h1>
+        <p className={styles.headerSubtitle}> Visualice el rendimiento de su inventario y ventas</p>
       </div>
 
       {estadisticas && (

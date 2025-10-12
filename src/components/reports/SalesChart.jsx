@@ -1,5 +1,6 @@
 // src/components/reports/SalesChart.jsx
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import styles from './SalesChart.module.css';
 
 export default function SalesChart({ data }) {
   // Formatear datos para el gráfico
@@ -13,9 +14,9 @@ export default function SalesChart({ data }) {
   }));
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">
-         Tendencias de Ventas
+    <div className={styles.container}>
+      <h3 className={styles.title}>
+        Tendencias de Ventas
       </h3>
       
       <ResponsiveContainer width="100%" height={300}>

@@ -75,3 +75,40 @@ export const obtenerEstadisticasGenerales = async () => {
     throw error;
   }
 };
+
+// FUNCIONES PARA GRAFICOS
+
+export const obtenerStockOverview = async () => {
+  try {
+    const response = await fetch(`${API_URL}/reportes/stock-overview`);
+    if (!response.ok) throw new Error('Error al obtener stock overview');
+    return await response.json();
+  } catch (error) {
+    console.error('Error en obtenerStockOverview:', error);
+    throw error;
+  }
+};
+
+export const obtenerStockPorCategoria = async () => {
+  try {
+    const response = await fetch(`${API_URL}/reportes/stock-por-categoria`);
+    if (!response.ok) throw new Error('Error al obtener stock por categoría');
+    return await response.json();
+  } catch (error) {
+    console.error('Error en obtenerStockPorCategoria:', error);
+    throw error;
+  }
+};
+
+export const obtenerHistorialProducto = async (productoId, dias = 30) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/reportes/historial-producto/${productoId}?dias=${dias}`
+    );
+    if (!response.ok) throw new Error('Error al obtener historial del producto');
+    return await response.json();
+  } catch (error) {
+    console.error('Error en obtenerHistorialProducto:', error);
+    throw error;
+  }
+};
