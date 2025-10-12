@@ -1,5 +1,5 @@
 import s from "../../pages/Products/Products.module.css"; 
-import DataTable from "../../components/common/Datatable/DataTable";
+import DataTable from "../../components/common/DataTable/DataTable";
 
 export default function ProductList({ products, stats, onEdit, onRemove }) {
   return (

@@ -5,13 +5,26 @@ import inventario from "../../assets/images/inventario.png";
 import agotado from "../../assets/images/agotado.png";
 import agregar from "../../assets/images/agregar-producto.png"
 
+// NUEVAS IMÁGENES PARA REPORTES
+import ventas from "../../assets/images/ventas.png";
+import dinero from "../../assets/images/dinero.png";
+import unidades from "../../assets/images/unidades.png";
+import stock from "../../assets/images/stock.png";
+
+
 export default function Icon({ name, className = "" , alt }) {
   const map = {
     products: paquete,     // total productos
     active: enStock,       // activos
     low: inventario,       // stock bajo
     out: agotado,          // agotados
-    add: agregar
+    add: agregar,
+
+    // Reportes (NUEVOS)
+    sales: ventas,
+    money: dinero,
+    units: unidades,
+    stock: stock,
   };
 
   const src = map[name] || paquete;
