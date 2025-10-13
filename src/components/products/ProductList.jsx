@@ -1,14 +1,39 @@
 import s from "../../pages/Products/Products.module.css"; 
 import DataTable from "../../components/common/DataTable/DataTable";
+import { useState } from "react";
+import s from "../../pages/Products/Products.module.css";
+import { searchProducts } from "../../services/productService";
 
-export default function ProductList({ products, stats, onEdit, onRemove }) {
+export default function ProductList({ products, stats, onEdit, onRemove, onSearch }) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = async (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    if (onSearch) {
+      await onSearch(term);
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Contenedor búsqueda */}
+
+
       <section className={s.panel}>
         <div className={s.panelHead}>
           <div>
             <h2 className={s.panelTitle}>Lista de Productos</h2>
             <p className={s.panelHint}>Gestiona todos los productos de tu inventario</p>
+          </div>
+          <div className={s.searchContainer}>
+            <input
+              type="text"
+              placeholder="Buscar por nombre..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className={s.searchInput}
+            />
           </div>
         </div>
 
@@ -48,13 +73,12 @@ export default function ProductList({ products, stats, onEdit, onRemove }) {
   );
 }
 
-// Helper Functions
+// Helpers
 function toMoney(n) {
   if (n === undefined || n === null) return "$0.00";
   return n.toLocaleString("es-ES", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
 }
 
-// StatusPill corregido para usar string
 function StatusPill({ status }) {
   const map = {
     activo: { bg: "#e8fff3", color: "#059669", label: "Activo" },

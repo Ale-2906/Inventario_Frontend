@@ -61,11 +61,12 @@ export const updateProduct = async (id, producto) => {
 };
 
 // Actualizar stock de producto
-export const updateStockProduct = async (id, cambio, motivo = 'Ajuste manual') => {
+// Actualizar stock de producto (stock absoluto)
+export const updateStockProduct = async (id, stock, motivo = 'Ajuste manual') => {
   if (!id) throw new Error("ID del producto es obligatorio");
   try {
-    const { data } = await axios.put(`${API_URL}/${id}`, {
-      stock: cambio,
+    const { data } = await axios.patch(`${API_URL}/${id}/stock`, {
+      stock,   // cantidad absoluta
       motivo
     }, {
       headers: getAuthHeader()
@@ -76,6 +77,7 @@ export const updateStockProduct = async (id, cambio, motivo = 'Ajuste manual') =
     throw err;
   }
 };
+
 
 // Eliminar producto (soft delete)
 export const deleteProduct = async (id) => {
@@ -90,3 +92,17 @@ export const deleteProduct = async (id) => {
     throw err;
   }
 };
+// Buscar productos por nombre en backend
+export const searchProducts = async (term) => {
+  try {
+    const { data } = await axios.get(`${API_URL}/search`, {
+      params: { q: term },
+      headers: getAuthHeader()
+    });
+    return data.data;
+  } catch (err) {
+    console.error("Error al buscar productos:", err);
+    throw err;
+  }
+};
+
