@@ -12,6 +12,7 @@ import Reports from '../pages/Reports/Reports';
 //Recuperar Contraseña
 import ForgotPassword from "../pages/auth/ForgotPassword";  
 import ResetPassword from "../pages/auth/ResetPassword"; 
+import Proveedores from "../pages/Suppliers/Suppliers";
 
 export default createBrowserRouter([
   // Rutas públicas protegidas
@@ -35,7 +36,7 @@ export default createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
       { path: "productos", element: <Products />},
-      { path: "reportes", element: <Reports />},
+      { path: "proveedores", element: <Proveedores /> },
     ],
   },
   

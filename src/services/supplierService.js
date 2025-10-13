@@ -1,4 +1,3 @@
-// src/services/supplierService.js
 import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/proveedores";
@@ -8,67 +7,107 @@ const getAuthHeader = () => {
   return { Authorization: `Bearer ${token}` };
 };
 
-/**
- * Obtener todos los proveedores
- */
-export const getSuppliers = async () => {
+// Traer todos los proveedores
+export const getSuppliers = async (includeInactive = false) => {
   try {
-    const response = await axios.get(API_URL, { headers: getAuthHeader() });
-    return response.data.data;
+    const { data } = await axios.get(API_URL, {
+      params: { includeInactive },
+      headers: getAuthHeader()
+    });
+
+    return data.data.map(s => ({
+      ...s,
+      status: s.estado ? "Activo" : "Desactivado",
+      totalProducts: s.totalProducts ?? 0,
+      categorias: s.categorias ?? []
+    }));
   } catch (err) {
     console.error("Error al obtener proveedores:", err);
     throw err;
   }
 };
 
-/**
- * Obtener proveedor por ID
- */
-export const getSupplierById = async (id) => {
-  try {
-    const response = await axios.get(`${API_URL}/${id}`, { headers: getAuthHeader() });
-    return response.data.data;
-  } catch (err) {
-    console.error(`Error al obtener proveedor ${id}:`, err);
-    throw err;
-  }
-};
-
-/**
- * Crear nuevo proveedor
- */
+// Crear proveedor
 export const createSupplier = async (supplier) => {
   try {
-    const response = await axios.post(API_URL, supplier, { headers: getAuthHeader() });
-    return response.data.data;
+    const payload = {
+      empresa: supplier.empresa,
+      contacto: supplier.contacto,
+      categorias: supplier.categoriesIds || [],
+      estado: supplier.status === "Activo"
+    };
+    const { data } = await axios.post(API_URL, payload, { headers: getAuthHeader() });
+    return {
+      ...data.data,
+      status: data.data.estado ? "Activo" : "Desactivado",
+      totalProducts: data.data.totalProducts ?? 0
+    };
   } catch (err) {
     console.error("Error al crear proveedor:", err);
     throw err;
   }
 };
 
-/**
- * Actualizar proveedor
- */
+// Actualizar proveedor
+// Actualizar proveedor
 export const updateSupplier = async (id, supplier) => {
   try {
-    const response = await axios.put(`${API_URL}/${id}`, supplier, { headers: getAuthHeader() });
-    return response.data.data;
+    // Estructura que espera tu backend
+    const payload = {
+      empresa: supplier.empresa,                    // nombre de la empresa
+      contacto: supplier.contacto,                   // nombre del contacto
+      categorias: supplier.categoriesIds || [],     // categorías seleccionadas
+      estado: supplier.status === "Activo"          // true o false
+    };
+
+    // Petición PUT al backend
+    const { data } = await axios.put(`${API_URL}/${id}`, payload, {
+      headers: getAuthHeader()
+    });
+
+    // Devuelve el proveedor actualizado en el formato del frontend
+    return {
+      id: data.data.id,
+      company: data.data.empresa,
+      contact: data.data.contacto,
+      status: data.data.estado ? "Activo" : "Desactivado",
+      categorias: data.data.categorias || [],
+      cantidadProductos: data.data.cantidadProductos ?? 0
+    };
+
   } catch (err) {
     console.error("Error al actualizar proveedor:", err);
     throw err;
   }
 };
 
-/**
- * Eliminar proveedor
- */
+
+// Eliminar proveedor (soft delete)
 export const deleteSupplier = async (id) => {
   try {
-    const response = await axios.delete(`${API_URL}/${id}`, { headers: getAuthHeader() });
-    return response.data;
+    // Usamos el endpoint de cambio de estado
+    const { data } = await axios.put(
+      `${API_URL}/${id}/status`,
+      { estado: false },
+      { headers: getAuthHeader() }
+    );
+    return data; // { success, message }
   } catch (err) {
-    console.error("Error al eliminar proveedor:", err);
+    console.error("Error al desactivar proveedor:", err);
+    throw err;
+  }
+};
+
+// Buscar proveedores por nombre (backend soporta ?search=)
+export const searchSuppliers = async (term) => {
+  try {
+    const { data } = await axios.get(`${API_URL}/search`, {
+      params: { q: term },
+      headers: getAuthHeader()
+    });
+    return data.data;
+  } catch (err) {
+    console.error("Error al buscar productos:", err);
     throw err;
   }
 };
