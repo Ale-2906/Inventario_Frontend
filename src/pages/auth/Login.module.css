@@ -27,3 +27,19 @@
 .logo{width:72px;height:auto}
 .appTitle{margin:0;font-size:20px;font-weight:800;color:var(--text)}
 .appSubtitle{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+
+.forgotLink {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  color: #2563eb;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.forgotLink:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}

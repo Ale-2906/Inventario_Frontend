@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 import Button from "../../components/common/Button/Button";
@@ -43,13 +43,16 @@ export default function Login() {
         }
 
           actions={
+            <>
             <Button type="submit" variant="outline"  disabled={invalid} style={{ width: "100%", marginTop: 16 }}>
               Ingresar
             </Button>
-
-          }
-
-        >
+            <Link to="/forgot-password" className={s.forgotLink}>
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </>
+      }
+    >
 
           {err && <Alert>{err}</Alert>}
 
