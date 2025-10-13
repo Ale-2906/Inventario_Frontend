@@ -71,3 +71,25 @@
   object-fit:contain;
   color:#fff;
 }
+.searchContainer {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.searchInput {
+  width: 100%;
+  max-width: 320px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.searchInput:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+}
+

@@ -92,3 +92,17 @@ export const deleteProduct = async (id) => {
     throw err;
   }
 };
+// Buscar productos por nombre en backend
+export const searchProducts = async (term) => {
+  try {
+    const { data } = await axios.get(`${API_URL}/search`, {
+      params: { q: term },
+      headers: getAuthHeader()
+    });
+    return data.data;
+  } catch (err) {
+    console.error("Error al buscar productos:", err);
+    throw err;
+  }
+};
+

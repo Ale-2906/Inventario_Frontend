@@ -11,7 +11,8 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  updateStockProduct
+  updateStockProduct,
+  searchProducts
 } from "../../services/productService";
 
 export default function Products() {
@@ -64,8 +65,15 @@ export default function Products() {
 
   const handleDelete = async () => {
     try {
+      // Eliminar (soft delete) en backend
       await deleteProduct(productToDelete);
-      setItems(prev => prev.filter(p => p.id !== productToDelete));
+
+      // Actualizar la lista local para reflejar estado inactivo
+      setItems(prev => prev.map(p =>
+        p.id === productToDelete
+          ? { ...p, estado: 'desactivado' }
+          : p
+      ));
     } catch (err) {
       console.error("Error al eliminar producto:", err);
     } finally {
@@ -73,6 +81,7 @@ export default function Products() {
       setProductToDelete(null);
     }
   };
+
 
   const handleSubmit = async (product) => {
     try {
@@ -131,7 +140,17 @@ export default function Products() {
           stats={stats}
           onEdit={editProduct}
           onRemove={confirmDeleteProduct}
+          onSearch={async (term) => {
+            if (!term) {
+              const all = await getProducts();
+              setItems(all);
+            } else {
+              const results = await searchProducts(term);
+              setItems(results);
+            }
+          }}
         />
+
       </section>
 
       {showConfirm && (
