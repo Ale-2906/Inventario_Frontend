@@ -11,7 +11,8 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  updateStockProduct
+  updateStockProduct,
+  searchProducts
 } from "../../services/productService";
 
 export default function Products() {
@@ -64,8 +65,15 @@ export default function Products() {
 
   const handleDelete = async () => {
     try {
+      // Eliminar (soft delete) en backend
       await deleteProduct(productToDelete);
-      setItems(prev => prev.filter(p => p.id !== productToDelete));
+
+      // Actualizar la lista local para reflejar estado inactivo
+      setItems(prev => prev.map(p =>
+        p.id === productToDelete
+          ? { ...p, estado: 'desactivado' }
+          : p
+      ));
     } catch (err) {
       console.error("Error al eliminar producto:", err);
     } finally {
@@ -74,20 +82,18 @@ export default function Products() {
     }
   };
 
+
   const handleSubmit = async (product) => {
     try {
-      // Actualizar producto existente
       if (selectedProduct) {
-        // 1. Actualizamos stock si cambió
-        const stockCambio = Number(product.stock) - Number(selectedProduct.stock);
-        if (stockCambio !== 0) {
-          await updateStockProduct(selectedProduct.id, stockCambio, 'Actualización desde formulario');
+        // 1. Actualizamos stock con valor absoluto
+        if (Number(product.stock) !== Number(selectedProduct.stock)) {
+          await updateStockProduct(selectedProduct.id, Number(product.stock), 'Actualización desde formulario');
         }
 
-        // 2. Actualizamos el resto del producto (nombre, precio, categoría, proveedor, estado, stock_minimo)
+        // 2. Actualizamos resto del producto
         const updated = await updateProduct(selectedProduct.id, {
-          ...product,
-          stock: Number(selectedProduct.stock) + stockCambio, // reflejar stock real
+          ...product
         });
 
         setItems(items.map(p => p.id === updated.id ? updated : p));
@@ -103,6 +109,7 @@ export default function Products() {
       console.error("Error al guardar producto:", err);
     }
   };
+
 
   return (
     <div className={s.page}>
@@ -133,7 +140,17 @@ export default function Products() {
           stats={stats}
           onEdit={editProduct}
           onRemove={confirmDeleteProduct}
+          onSearch={async (term) => {
+            if (!term) {
+              const all = await getProducts();
+              setItems(all);
+            } else {
+              const results = await searchProducts(term);
+              setItems(results);
+            }
+          }}
         />
+
       </section>
 
       {showConfirm && (

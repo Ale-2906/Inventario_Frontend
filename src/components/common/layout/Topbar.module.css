@@ -67,6 +67,7 @@
   background: rgba(255, 255, 255, .08);
   padding: 6px 10px;
   border-radius: 999px;
+  width: 150px;
 }
 
 .profileInfo {
