@@ -37,6 +37,7 @@ export default function ProductList({ products, stats, onEdit, onRemove, onSearc
         </div>
 
         <DataTable
+        pageSize={5}
           columns={[
             { key: "nombre", label: "Producto" },
             { key: "categoria_nombre", label: "Categoría" },

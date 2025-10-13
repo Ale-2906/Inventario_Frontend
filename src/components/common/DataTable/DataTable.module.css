@@ -1,131 +1,124 @@
-/* Contenedor de tabla */
 .wrap {
-  overflow-x: auto;
-  border-radius: 12px;
-  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* Tabla base */
+.scrollX {
+  overflow-x: auto;
+}
+
 .table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 14px;
-  background: var(--card); /* Usamos el color de la tarjeta de fondo */
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(2, 8, 20, 0.04);
+  border-collapse: collapse;
+  table-layout: fixed;          /* Necesario para que el ellipsis funcione de forma estable */
+  min-width: 680px;             /* Evita que columnas se aplasten demasiado */
 }
 
-/* Cabecera */
-.table thead th {
+th, td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+th {
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+  color: #374151;
+  background: #f9fafb;
   position: sticky;
   top: 0;
   z-index: 1;
-  text-align: left;
-  font-weight: 700;
-  color: var(--text); /* Color de texto principal */
-  font-size: 13px;
-  padding: 14px 18px;
-  background: var(--bg); /* Fondo de la cabecera suave */
-  border-bottom: 1px solid var(--border);
+}
+
+.right { text-align: right; }
+
+.evenRow { background: #ffffff; }
+.oddRow  { background: #fcfcfd; }
+
+.empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 24px 12px;
 }
 
 /* Celdas */
-.table tbody td {
-  padding: 14px 18px;
-  color: var(--text);
-  font-size: 14px;
-  border-bottom: 1px solid var(--border);
-  background: var(--card);
+.cell {
+  /* base */
 }
 
-/* Filas hover */
-.table tbody tr:hover td {
-  background: var(--sidebar-tint); /* Fondo suave cuando se pasa el mouse */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Diferenciar filas pares e impares */
-.table tbody tr:nth-child(even) {
-  background: var(--bg); /* Fondo suave */
-}
-.table tbody tr:nth-child(odd) {
-  background: var(--card);
+.noTruncate {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
 }
 
-/* Esquinas redondeadas */
-.table tbody tr:last-child td:first-child {
-  border-bottom-left-radius: 12px;
-}
-.table tbody tr:last-child td:last-child {
-  border-bottom-right-radius: 12px;
+.unconstrained {
+  overflow: visible !important;  /* útil para botones/menús en acciones */
+  white-space: normal !important;
 }
 
-/* Columna alineada a la derecha */
-.right {
-  text-align: right;
-}
-
-/* Texto vacío */
-.empty {
-  text-align: center;
-  padding: 28px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-/* ===== Estados (pill/badges) ===== */
-.status {
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  display: inline-block;
-}
-
-.status.active {
-  background: var(--brand-green); /* Verde */
-  color: white;
-}
-.status.low {
-  background: var(--brand-teal); /* Teal */
-  color: white;
-}
-.status.out {
-  background: var(--brand-pink); /* Rojo */
-  color: white;
-}
-
-/* ===== Botones de acción ===== */
-.actionBtn {
-  display: inline-flex;
+/* Paginación */
+.pagerBar {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--card);
+  padding-top: 8px;
+}
+
+.pagerInfo {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.pager {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pagerBtn {
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
-  margin-left: 6px;
-  color: var(--text);
+  font-size: 12px;
+  min-width: 32px;
 }
 
-.actionBtn svg {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
+.pagerBtn:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
-.actionBtn:hover {
-  background: var(--sidebar-tint);
+.active {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
 }
 
-.actionBtn.danger {
-  color: var(--brand-pink);
-  border-color: var(--brand-pink-2);
+.pageNums {
+  display: flex;
+  gap: 4px;
 }
-.actionBtn.danger:hover {
-  background: var(--brand-pink-2);
+
+.pageItem {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.dots {
+  padding: 6px 8px;
+  color: #6b7280;
 }

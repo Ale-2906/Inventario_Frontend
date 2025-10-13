@@ -10,29 +10,26 @@ export default function ProductsCard({ stats }) {
         value={stats.total}
         icon={<Icon name="suppliers" />}
         variant="cyan"
-        progress={72}
       />
       <KPICard
         title="Proveedores Activos"
         value={stats.activos}
         icon={<Icon name="suppliersActives" />}
         variant="teal"
-        progress={54}
       />
       <KPICard
-        title="Categorías"
-        value={stats.bajo}
+        title="Proveedores con Categorías"
+        value={stats.proveedoresConCategorias}
         icon={<Icon name="category" />}
         variant="pink"
-        progress={30}
       />
       <KPICard
-        title="Productos Totales"
-        value={stats.agot}
+        title="Total Productos Asociados"
+        value={stats.totalProductosAsociados}
         icon={<Icon name="products" />}
         variant="purple"
-        progress={10}
       />
+
     </section>
   );
 }
