@@ -1,10 +1,92 @@
-.grid{display:grid;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr))}
-.tile{color:#fff;border-radius:14px;padding:16px;box-shadow:var(--shadow)}
-.cyan{background:linear-gradient(135deg,#00bcd4,#34c0ff)}
-.teal{background:linear-gradient(135deg,#09c39b,#2ad1b0)}
-.pink{background:linear-gradient(135deg,#ff6b9e,#ff7a7f)}
-.purple{background:linear-gradient(135deg,#6e7bff,#7e6bff)}
-.tileTitle{opacity:.9;font-weight:600}
-.tileValue{font-size:26px;font-weight:800;margin-top:6px}
-@media (max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:650px){.grid{grid-template-columns:1fr}}
+/* src/pages/Dashboard/Dashboard.module.css */
+
+.headerTitle{ margin:0; font-size:28px; font-weight:800; color:#111827 }
+.headerSubtitle{ margin:4px 0 0; font-size:14px; color:#6b7280; margin-bottom: 25px;}
+
+
+/* Content */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Chart Wrapper para SalesChart */
+.chartWrapper {
+  width: 100%;
+}
+
+/* Charts Grid */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 1.5rem;
+}
+
+.chartCard {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chartCard h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+/* Alerts Section */
+.alertsSection {
+  width: 100%;
+}
+
+/* Loading */
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.loadingContent {
+  text-align: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingText {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .headerTitle {
+    font-size: 1.5rem;
+  }
+}
