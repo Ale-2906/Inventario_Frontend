@@ -33,7 +33,7 @@ export default function Login() {
     if (res.success) {
       navigate("/", { replace: true });
     } else {
-      setErr(res.message);
+      setErr("Usuario incorrecto");
     }
   };
 

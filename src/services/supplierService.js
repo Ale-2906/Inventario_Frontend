@@ -72,3 +72,15 @@ export const deleteSupplier = async (id) => {
     throw err;
   }
 };
+export const searchSupplierByName = async (q) => {
+  try {
+    const { data } = await axios.get(`${API_URL}/search`, { 
+      params: { q },
+      headers: getAuthHeader()
+    });
+    return data.data;
+  } catch (err) {
+    console.error("Error al buscar proveedor:", err);
+    throw err;
+  }
+};

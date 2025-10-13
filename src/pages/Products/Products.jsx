@@ -6,14 +6,7 @@ import ConfirmModal from "../../components/common/ConfirmModal/ConfirmModal";
 import s from "./Products.module.css";
 import Button from "../../components/common/Button/Button";
 import Icon from "../../components/common/icon";
-import {
-  getProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  updateStockProduct,
-  searchProducts
-} from "../../services/productService";
+import { getProducts, createProduct, updateProduct, deleteProduct } from "../../services/productService";
 
 export default function Products() {
   const [items, setItems] = useState([]);

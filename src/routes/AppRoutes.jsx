@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "../pages/auth/Login";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Products from "../pages/Products/Products";
+import Proveedores from "../pages/Suppliers/Suppliers";
 
 export default createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -15,6 +16,7 @@ export default createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
       { path: "productos", element: <Products />},
+      { path: "proveedores", element: <Proveedores /> },
     ],
   },
   { path: "*", element: <Navigate to="/" replace /> },
