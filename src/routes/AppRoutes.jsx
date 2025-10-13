@@ -37,6 +37,7 @@ export default createBrowserRouter([
       { index: true, element: <Dashboard /> },
       { path: "productos", element: <Products />},
       { path: "proveedores", element: <Proveedores /> },
+      { path: "reportes", element: <Reports /> }
     ],
   },
   
