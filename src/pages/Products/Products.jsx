@@ -6,7 +6,13 @@ import ConfirmModal from "../../components/common/ConfirmModal/ConfirmModal";
 import s from "./Products.module.css";
 import Button from "../../components/common/Button/Button";
 import Icon from "../../components/common/icon";
-import { getProducts, createProduct, updateProduct, deleteProduct } from "../../services/productService";
+import {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  updateStockProduct
+} from "../../services/productService";
 
 export default function Products() {
   const [items, setItems] = useState([]);
@@ -14,7 +20,6 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  // Para modal de confirmación
   const [showConfirm, setShowConfirm] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
@@ -32,9 +37,9 @@ export default function Products() {
 
   const stats = useMemo(() => {
     const total = items.length;
-    const activos = items.filter(i => i.estado === 1).length;
+    const activos = items.filter(i => i.estado === 'activo').length;
     const bajo = items.filter(i => i.stock > 0 && i.stock <= 5).length;
-    const agot = items.filter(i => i.stock === 0 || i.estado === 0).length;
+    const agot = items.filter(i => i.stock === 0 || i.estado === 'desactivado').length;
     return { total, activos, bajo, agot };
   }, [items]);
 
@@ -71,13 +76,27 @@ export default function Products() {
 
   const handleSubmit = async (product) => {
     try {
+      // Actualizar producto existente
       if (selectedProduct) {
-        const updated = await updateProduct(selectedProduct.id, product);
+        // 1. Actualizamos stock si cambió
+        const stockCambio = Number(product.stock) - Number(selectedProduct.stock);
+        if (stockCambio !== 0) {
+          await updateStockProduct(selectedProduct.id, stockCambio, 'Actualización desde formulario');
+        }
+
+        // 2. Actualizamos el resto del producto (nombre, precio, categoría, proveedor, estado, stock_minimo)
+        const updated = await updateProduct(selectedProduct.id, {
+          ...product,
+          stock: Number(selectedProduct.stock) + stockCambio, // reflejar stock real
+        });
+
         setItems(items.map(p => p.id === updated.id ? updated : p));
       } else {
+        // Crear nuevo producto
         const created = await createProduct(product);
         setItems([...items, created]);
       }
+
       setShowForm(false);
       setSelectedProduct(null);
     } catch (err) {
@@ -113,11 +132,10 @@ export default function Products() {
           products={filtered}
           stats={stats}
           onEdit={editProduct}
-          onRemove={confirmDeleteProduct} // Abrir modal
+          onRemove={confirmDeleteProduct}
         />
       </section>
 
-      {/* Modal de confirmación */}
       {showConfirm && (
         <ConfirmModal
           title="Confirmar eliminación"

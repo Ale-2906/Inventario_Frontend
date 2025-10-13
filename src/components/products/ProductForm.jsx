@@ -37,7 +37,7 @@ export default function ProductForm({ product, onSubmit, onClose }) {
         price: "",
         stock: "",
         stock_minimo: 5,
-        status: 1
+        status: "activo"
       });
     }
   }, [product]);
@@ -63,15 +63,17 @@ export default function ProductForm({ product, onSubmit, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({
+     const payload = {
       nombre: form.name,
       categoria_id: form.category_id || null,
       proveedor_id: form.supplier_id || null,
       precio: Number(form.price),
       stock: Number(form.stock),
       stock_minimo: Number(form.stock_minimo),
-      estado: Number(form.status)
-    });
+      // Estado debe enviarse como enum string
+      estado: form.status
+    };
+    onSubmit(payload);
     onClose();
   };
 
@@ -114,8 +116,9 @@ export default function ProductForm({ product, onSubmit, onClose }) {
           <div>
             <label>Estado</label>
             <select name="status" value={form.status} onChange={handleChange} className={styles.inputField}>
-              <option value={1}>Activo</option>
-              <option value={0}>Inactivo</option>
+              <option value="activo">Activo</option>
+              <option value="desactivado">Inactivo</option>
+              <option value="agotado">Agotado</option>
             </select>
           </div>
           <div className={styles.modalActions}>
