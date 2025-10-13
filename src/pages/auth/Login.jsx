@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 import Button from "../../components/common/Button/Button";
@@ -33,7 +33,7 @@ export default function Login() {
     if (res.success) {
       navigate("/", { replace: true });
     } else {
-      setErr(res.message);
+      setErr("Las credenciales son incorrenctas");
     }
   };
 
@@ -44,25 +44,21 @@ export default function Login() {
           title={
             <div className={s.logoWrap}>
               <img src={logo} alt="Logo Inventario" className={s.logo} />
-              <p className={s.appSubtitle}>Acceso para administradores</p>
+              <p className={s.appSubtitle}>Panel de Administración</p>
             </div>
           }
           actions={
-            <Button
-              type="submit"
-              variant="outline"
-              disabled={invalid}
-              style={{ width: "100%", marginTop: 16 }}
-            >
+            <Button type="submit" variant="outline"  disabled={invalid}  className={s.cta} style={{ width: "100%", marginTop: 16 }}>
               Ingresar
             </Button>
-          }
-        >
+      }
+    >
+
           {err && <Alert>{err}</Alert>}
 
           <Input
             label="Correo"
-            placeholder="ej. admin@dominio.com"
+            placeholder="ej. admin@email.com"
             value={form.correo}
             onChange={(e) => setForm({ ...form, correo: e.target.value })}
             autoFocus
@@ -89,6 +85,9 @@ export default function Login() {
               </button>
             }
           />
+          <Link to="/forgot-password" className={s.forgotLink}>
+            ¿Olvidaste tu contraseña?
+          </Link>
         </Card>
       </form>
     </section>
