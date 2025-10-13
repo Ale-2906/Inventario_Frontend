@@ -14,53 +14,53 @@ export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ correo: "", contrasena: "" });
   const [err, setErr] = useState("");
   const [showPass, setShowPass] = useState(false);
 
-  const invalid = !form.username.trim() || !form.password.trim();
+  const invalid = !form.correo.trim() || !form.contrasena.trim();
 
-  const onSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
+
     if (invalid) {
-      setErr("Ingresa usuario y contraseña.");
+      setErr("Correo y contraseña son obligatorios.");
       return;
     }
-    login({ username: form.username });
-    navigate("/", { replace: true });
+
+    const res = await login(form);
+    if (res.success) {
+      navigate("/", { replace: true });
+    } else {
+      setErr("Las credenciales son incorrenctas");
+    }
   };
 
   return (
     <section className={s.screen}>
-
-      <form onSubmit={onSubmit} noValidate>
-       
-        <Card title={ <div className={s.logoWrap}>
-          <img src={logo} alt="Logo Inventario" className={s.logo} />
-          <p className={s.appSubtitle}>Acceso para administradores</p>
-        </div>
-        }
-
+      <form onSubmit={handleSubmit} noValidate>
+        <Card
+          title={
+            <div className={s.logoWrap}>
+              <img src={logo} alt="Logo Inventario" className={s.logo} />
+              <p className={s.appSubtitle}>Panel de Administración</p>
+            </div>
+          }
           actions={
-            <>
-            <Button type="submit" variant="outline"  disabled={invalid} style={{ width: "100%", marginTop: 16 }}>
+            <Button type="submit" variant="outline"  disabled={invalid}  className={s.cta} style={{ width: "100%", marginTop: 16 }}>
               Ingresar
             </Button>
-            <Link to="/forgot-password" className={s.forgotLink}>
-            ¿Olvidaste tu contraseña?
-          </Link>
-        </>
       }
     >
 
           {err && <Alert>{err}</Alert>}
 
           <Input
-            label="Usuario"
-            placeholder="ej. admin"
-            value={form.username}
-            onChange={(e) => setForm({ ...form, username: e.target.value })}
+            label="Correo"
+            placeholder="ej. admin@email.com"
+            value={form.correo}
+            onChange={(e) => setForm({ ...form, correo: e.target.value })}
             autoFocus
             autoComplete="username"
           />
@@ -69,8 +69,8 @@ export default function Login() {
             label="Contraseña"
             type={showPass ? "text" : "password"}
             placeholder="••••••••"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            value={form.contrasena}
+            onChange={(e) => setForm({ ...form, contrasena: e.target.value })}
             autoComplete="current-password"
             rightAdornment={
               <button
@@ -85,6 +85,9 @@ export default function Login() {
               </button>
             }
           />
+          <Link to="/forgot-password" className={s.forgotLink}>
+            ¿Olvidaste tu contraseña?
+          </Link>
         </Card>
       </form>
     </section>

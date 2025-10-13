@@ -76,6 +76,7 @@ export default function ForgotPassword() {
                 type="submit"
                 variant="outline"
                 disabled={invalid || loading}
+                className={s.cta}
                 style={{ width: "100%", marginTop: 16 }}
               >
                 {loading ? "Enviando..." : "Enviar código"}
@@ -100,7 +101,7 @@ export default function ForgotPassword() {
           <Input
             label="Correo electrónico"
             type="email"
-            placeholder="tu@email.com"
+            placeholder="admin@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoFocus

@@ -116,6 +116,7 @@ export default function ResetPassword() {
                 type="submit"
                 variant="outline"
                 disabled={invalid || loading}
+                className={s.cta}
                 style={{ width: "100%", marginTop: 16 }}
               >
                 {loading ? "Actualizando..." : "Cambiar contraseña"}
@@ -131,7 +132,7 @@ export default function ResetPassword() {
           <Input
             label="Correo electrónico"
             type="email"
-            placeholder="tu@email.com"
+            placeholder="admin@email.com"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             autoComplete="email"
@@ -152,7 +153,7 @@ export default function ResetPassword() {
             disabled={loading}
             style={{ textAlign: "center", letterSpacing: "0.5em", fontSize: 20 }}
           />
-          <p style={{ fontSize: 12, color: "#94a3b8", marginTop: -8, marginBottom: 16 }}>
+          <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 3, marginBottom: 16 }}>
             El código expira en 15 minutos
           </p>
 
@@ -177,7 +178,7 @@ export default function ResetPassword() {
               </button>
             }
           />
-          <p style={{ fontSize: 12, color: "#94a3b8", marginTop: -8, marginBottom: 16 }}>
+          <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 3, marginBottom: 16 }}>
             Mínimo 6 caracteres
           </p>
 
