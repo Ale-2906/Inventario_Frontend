@@ -26,6 +26,7 @@ export default function ProductList({ products, stats, onEdit, onRemove, onSearc
             <p className={s.panelHint}>Gestiona todos los productos de tu inventario</p>
           </div>
           <div className={s.searchContainer}>
+            <span className={s.searchIcon}>🔍</span>
             <input
               type="text"
               placeholder="Buscar por nombre..."

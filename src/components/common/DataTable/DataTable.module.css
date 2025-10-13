@@ -43,11 +43,6 @@ th {
   padding: 24px 12px;
 }
 
-/* Celdas */
-.cell {
-  /* base */
-}
-
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;

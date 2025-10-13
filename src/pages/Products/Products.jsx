@@ -131,15 +131,8 @@ export default function Products() {
           stats={stats}
           onEdit={editProduct}
           onRemove={confirmDeleteProduct}
-          onSearch={async (term) => {
-            if (!term) {
-              const all = await getProducts();
-              setItems(all);
-            } else {
-              const results = await searchProducts(term);
-              setItems(results);
-            }
-          }}
+        onSearch={(term) => setQ(term)}
+
         />
       </section>
 
