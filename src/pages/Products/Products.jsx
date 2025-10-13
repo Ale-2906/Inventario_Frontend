@@ -76,18 +76,15 @@ export default function Products() {
 
   const handleSubmit = async (product) => {
     try {
-      // Actualizar producto existente
       if (selectedProduct) {
-        // 1. Actualizamos stock si cambió
-        const stockCambio = Number(product.stock) - Number(selectedProduct.stock);
-        if (stockCambio !== 0) {
-          await updateStockProduct(selectedProduct.id, stockCambio, 'Actualización desde formulario');
+        // 1. Actualizamos stock con valor absoluto
+        if (Number(product.stock) !== Number(selectedProduct.stock)) {
+          await updateStockProduct(selectedProduct.id, Number(product.stock), 'Actualización desde formulario');
         }
 
-        // 2. Actualizamos el resto del producto (nombre, precio, categoría, proveedor, estado, stock_minimo)
+        // 2. Actualizamos resto del producto
         const updated = await updateProduct(selectedProduct.id, {
-          ...product,
-          stock: Number(selectedProduct.stock) + stockCambio, // reflejar stock real
+          ...product
         });
 
         setItems(items.map(p => p.id === updated.id ? updated : p));
@@ -103,6 +100,7 @@ export default function Products() {
       console.error("Error al guardar producto:", err);
     }
   };
+
 
   return (
     <div className={s.page}>

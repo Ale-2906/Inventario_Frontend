@@ -61,11 +61,12 @@ export const updateProduct = async (id, producto) => {
 };
 
 // Actualizar stock de producto
-export const updateStockProduct = async (id, cambio, motivo = 'Ajuste manual') => {
+// Actualizar stock de producto (stock absoluto)
+export const updateStockProduct = async (id, stock, motivo = 'Ajuste manual') => {
   if (!id) throw new Error("ID del producto es obligatorio");
   try {
-    const { data } = await axios.put(`${API_URL}/${id}`, {
-      stock: cambio,
+    const { data } = await axios.patch(`${API_URL}/${id}/stock`, {
+      stock,   // cantidad absoluta
       motivo
     }, {
       headers: getAuthHeader()
@@ -76,6 +77,7 @@ export const updateStockProduct = async (id, cambio, motivo = 'Ajuste manual') =
     throw err;
   }
 };
+
 
 // Eliminar producto (soft delete)
 export const deleteProduct = async (id) => {
