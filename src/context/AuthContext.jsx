@@ -1,31 +1,50 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getItem, setItem, removeItem } from "../lib/storage";
+import axios from "axios";
 
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+
 export default function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem("token") || null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const u = getItem("demo_auth");
-        if (u) {
-            setUser(u);
+        if (token) {
+            const storedUser = JSON.parse(localStorage.getItem("user"));
+            setUser(storedUser);
         }
         setLoading(false);
-    }, []);
-    const login = ({ username }) => {
-        const fake = { name: username.trim(), role: "admin" };
-        setItem("demo_auth", fake);
-        setUser(fake);
+    }, [token]);
+
+    const login = async ({ correo, contrasena }) => {
+        try {
+            const res = await axios.post(`${API_URL}/auth/login`, { correo, contrasena });
+            if (res.data.success) {
+                const { token, usuario } = res.data.data;
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", JSON.stringify(usuario));
+                setUser(usuario);
+                setToken(token);
+                return { success: true };
+            }
+            return { success: false, message: res.data.message };
+        } catch (err) {
+            return { success: false, message: err.message };
+        }
     };
+
     const logout = () => {
-        removeItem("demo_auth");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setUser(null);
-    }
+        setToken(null);
+    };
+
     return (
-        < AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, token, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );
