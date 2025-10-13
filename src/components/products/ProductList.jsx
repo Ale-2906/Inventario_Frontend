@@ -1,6 +1,6 @@
+import s from "../../pages/Products/Products.module.css"; 
+import DataTable from "../../components/common/DataTable/DataTable";
 import { useState } from "react";
-import s from "../../pages/Products/Products.module.css";
-import DataTable from "../../components/common/Datatable/DataTable";
 import { searchProducts } from "../../services/productService";
 
 export default function ProductList({ products, stats, onEdit, onRemove, onSearch }) {

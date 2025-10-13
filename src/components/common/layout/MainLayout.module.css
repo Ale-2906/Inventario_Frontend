@@ -37,7 +37,7 @@
 
 /* ====== COLAPSABLE DESKTOP (icon-only) ====== */
 .collapsed{
-  grid-template-columns: 72px 1fr;    /* sidebar estrecho */
+  grid-template-columns: 0px 1fr;    /* sidebar estrecho */
 }
 
 .show{   transform: translateX(0); }

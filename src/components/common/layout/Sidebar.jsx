@@ -15,7 +15,6 @@ const sections = [
       { to: "/productos", label: "Productos", icon: "📦" },
       { to: "/proveedores", label: "Proveedores", icon: "🤝" },
       { to: "/reportes", label: "Reportes", icon: "📈" },
-      { to: "/configuracion", label: "Configuración", icon: "⚙️" },
     ],
   },
 ];
