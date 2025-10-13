@@ -197,7 +197,7 @@ export default function Reports() {
       alert('Error al generar el PDF. Por favor, intenta nuevamente.');
     }
   };
-  
+
   const columnasVentas = [
     { key: 'id', label: 'ID' },
     { 
@@ -216,7 +216,7 @@ export default function Reports() {
   ];
 
   const columnasStock = [
-    { key: 'id', label: 'ID' },
+    //{ key: 'id', label: 'ID' },
     { key: 'producto', label: 'Producto' },
     { 
       key: 'cambio', 
