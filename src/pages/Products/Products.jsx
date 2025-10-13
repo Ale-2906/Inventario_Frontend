@@ -3,6 +3,7 @@ import ProductList from "../../components/products/ProductList";
 import ProductForm from "../../components/products/ProductForm";
 import ProductsCard from "../../components/products/ProductCard";
 import ConfirmModal from "../../components/common/ConfirmModal/ConfirmModal";
+import MessageModal from "../../components/common/MessageModal/MessageModal"; // <-- Importamos
 import s from "./Products.module.css";
 import Button from "../../components/common/Button/Button";
 import Icon from "../../components/common/icon";
@@ -20,9 +21,15 @@ export default function Products() {
   const [q, setQ] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
-
   const [showConfirm, setShowConfirm] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+
+  // Estado para mensaje modal
+  const [messageModal, setMessageModal] = useState({ visible: false, title: "", message: "", type: "info" });
+
+  const showMessage = (title, message, type = "info") => {
+    setMessageModal({ visible: true, title, message, type });
+  };
 
   useEffect(() => {
     async function fetchProducts() {
@@ -31,6 +38,7 @@ export default function Products() {
         setItems(products);
       } catch (err) {
         console.error("Error al cargar productos:", err);
+        showMessage("Error", "No se pudieron cargar los productos", "error");
       }
     }
     fetchProducts();
@@ -65,51 +73,41 @@ export default function Products() {
 
   const handleDelete = async () => {
     try {
-      // Eliminar (soft delete) en backend
       await deleteProduct(productToDelete);
-
-      // Actualizar la lista local para reflejar estado inactivo
-      setItems(prev => prev.map(p =>
-        p.id === productToDelete
-          ? { ...p, estado: 'desactivado' }
-          : p
-      ));
+      setItems(prev => prev.map(p => p.id === productToDelete ? { ...p, estado: 'desactivado' } : p));
+      showMessage("Éxito", "Producto desactivado correctamente", "success");
     } catch (err) {
       console.error("Error al eliminar producto:", err);
+      showMessage("Error", "No se pudo eliminar el producto", "error");
     } finally {
       setShowConfirm(false);
       setProductToDelete(null);
     }
   };
 
-
   const handleSubmit = async (product) => {
     try {
       if (selectedProduct) {
-        // 1. Actualizamos stock con valor absoluto
         if (Number(product.stock) !== Number(selectedProduct.stock)) {
           await updateStockProduct(selectedProduct.id, Number(product.stock), 'Actualización desde formulario');
         }
 
-        // 2. Actualizamos resto del producto
-        const updated = await updateProduct(selectedProduct.id, {
-          ...product
-        });
-
+        const updated = await updateProduct(selectedProduct.id, { ...product });
         setItems(items.map(p => p.id === updated.id ? updated : p));
+        showMessage("Éxito", "Producto actualizado correctamente", "success");
       } else {
-        // Crear nuevo producto
         const created = await createProduct(product);
         setItems([...items, created]);
+        showMessage("Éxito", "Producto creado correctamente", "success");
       }
 
       setShowForm(false);
       setSelectedProduct(null);
     } catch (err) {
       console.error("Error al guardar producto:", err);
+      showMessage("Error", "No se pudo guardar el producto", "error");
     }
   };
-
 
   return (
     <div className={s.page}>
@@ -150,7 +148,6 @@ export default function Products() {
             }
           }}
         />
-
       </section>
 
       {showConfirm && (
@@ -159,6 +156,15 @@ export default function Products() {
           message="¿Deseas eliminar este producto?"
           onConfirm={handleDelete}
           onCancel={() => setShowConfirm(false)}
+        />
+      )}
+
+      {messageModal.visible && (
+        <MessageModal
+          title={messageModal.title}
+          message={messageModal.message}
+          type={messageModal.type}
+          onClose={() => setMessageModal({ visible: false, title: "", message: "", type: "info" })}
         />
       )}
     </div>

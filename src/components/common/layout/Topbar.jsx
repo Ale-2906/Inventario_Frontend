@@ -1,5 +1,5 @@
 import s from "./Topbar.module.css";
-import logo from "../../../assets/images/logo.png";
+import logo from "../../../assets/images/logo_navbar.png";
 import { useAuth } from "../../../context/AuthContext";
 
 export default function Topbar({ onToggleSidebar }) {
