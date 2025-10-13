@@ -7,26 +7,37 @@ import Icon from "../../components/common/icon";
 import ConfirmModal from "../../components/common/ConfirmModal/ConfirmModal";
 import MessageModal from "../../components/common/MessageModal/MessageModal";
 import s from "./Suppliers.module.css";
-import { getSuppliers, createSupplier, updateSupplier, deleteSupplier } from "../../services/supplierService";
+import {
+  getSuppliers,
+  createSupplier,
+  updateSupplier,      
+  deleteSupplierSmart     // inteligente: hard si 0 productos, si no soft
+} from "../../services/supplierService";
 
 export default function Suppliers() {
   const [items, setItems] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  // 🔹 Estado para confirmación de desactivación
+  // Confirmación genérica para eliminar/desactivar
   const [confirm, setConfirm] = useState({ open: false, id: null });
 
-  // 🔹 Estado para mensajes (éxito/error)
+  // Mensajes globales
   const [msg, setMsg] = useState({ open: false, type: "success", title: "", message: "" });
 
   useEffect(() => {
     async function fetchSuppliers() {
       try {
-        const data = await getSuppliers(true);
+        const data = await getSuppliers(true); // incluye inactivos
         setItems(data);
       } catch (err) {
         console.error("Error al cargar proveedores:", err);
+        setMsg({
+          open: true,
+          type: "error",
+          title: "Error",
+          message: "No se pudieron cargar los proveedores."
+        });
       }
     }
     fetchSuppliers();
@@ -37,7 +48,7 @@ export default function Suppliers() {
     const total = items.length;
     const activos = items.filter(i => i.status === "Activo").length;
     const proveedoresConCategorias = items.filter(i => i.categorias?.length > 0).length;
-    const totalProductosAsociados = items.reduce((acc, i) => acc + (i.cantidadProductos ?? 0), 0);
+    const totalProductosAsociados = items.reduce((acc, i) => acc + (i.cantidadProductos ?? i.totalProducts ?? 0), 0);
     return { total, activos, proveedoresConCategorias, totalProductosAsociados };
   }, [items]);
 
@@ -47,85 +58,95 @@ export default function Suppliers() {
     setShowForm(true);
   };
 
-  // Dentro de Suppliers.jsx
-const handleSubmit = async (supplier) => {
-  try {
-    let saved;
-    if (selectedSupplier) {
-      // EDITAR
-      saved = await updateSupplier(selectedSupplier.id, supplier);
-      setItems(items.map(p => (p.id === saved.id ? saved : p)));
-
-      setMsg({
-        open: true,
-        type: "success",
-        title: "Proveedor actualizado",
-        message: `Se actualizó correctamente: ${saved.company ?? saved.empresa ?? ""}.`
-      });
-    } else {
-      // CREAR
-      saved = await createSupplier(supplier);
-      setItems([...items, saved]);
-
-      setMsg({
-        open: true,
-        type: "success",
-        title: "Proveedor creado",
-        message: `Se creó correctamente: ${saved.company ?? saved.empresa ?? ""}.`
-      });
-    }
-  } catch (err) {
-    console.error("Error al guardar proveedor:", err);
-    setMsg({
-      open: true,
-      type: "error",
-      title: "No se pudo guardar",
-      message: err?.response?.data?.message || err.message || "Error desconocido"
-    });
-  } finally {
-    setShowForm(false);
-    setSelectedSupplier(null);
-  }
-};
-
-
-  // 🔹 Abrir confirmación (se llama desde la lista)
-  const askDeactivate = (id) => {
-    setConfirm({ open: true, id });
-  };
-
-  // 🔹 Confirmar desactivación
-  const confirmDeactivate = async () => {
-    const id = confirm.id;
-    setConfirm({ open: false, id: null });
-
+  const handleSubmit = async (supplier) => {
     try {
-      await deleteSupplier(id); // PATCH /:id/status { estado:false }
-      // Optimistic UI: marcar como desactivado de inmediato
-      setItems(prev =>
-        prev.map(p =>
-          p.id === id ? { ...p, status: "Desactivado", estado: false } : p
-        )
-      );
+      let saved;
+      if (selectedSupplier) {
+        // EDITAR
+        saved = await updateSupplier(selectedSupplier.id, supplier);
+        setItems(items.map(p => (p.id === saved.id ? saved : p)));
 
-      setMsg({
-        open: true,
-        type: "success",
-        title: "Proveedor desactivado",
-        message: "El proveedor fue desactivado correctamente."
-      });
+        setMsg({
+          open: true,
+          type: "success",
+          title: "Proveedor actualizado",
+          message: `Se actualizó correctamente: ${saved.company ?? saved.empresa ?? ""}.`
+        });
+      } else {
+        // CREAR
+        saved = await createSupplier(supplier);
+        setItems([...items, saved]);
+
+        setMsg({
+          open: true,
+          type: "success",
+          title: "Proveedor creado",
+          message: `Se creó correctamente: ${saved.company ?? saved.empresa ?? ""}.`
+        });
+      }
     } catch (err) {
-      console.error("Error al desactivar proveedor:", err);
+      console.error("Error al guardar proveedor:", err);
       setMsg({
         open: true,
         type: "error",
-        title: "No se pudo desactivar",
-        // message: err.response?.data?.message || err.message
+        title: "No se pudo guardar",
+        message: err?.response?.data?.message || err.message || "Error desconocido"
+      });
+    } finally {
+      setShowForm(false);
+      setSelectedSupplier(null);
+    }
+  };
+
+  // 🔹 Abrir confirmación de **eliminar inteligente**
+  const askRemove = (id) => {
+    setConfirm({ open: true, id });
+  };
+
+  // 🔹 Confirmar eliminación inteligente
+  const confirmRemove = async () => {
+    const id = confirm.id;
+    setConfirm({ open: false, id: null });
+
+    // Tomamos la fila para usar su conteo como fallback si el backend /:id no está
+    const row = items.find(s => s.id === id);
+    const fallbackCount = row?.totalProducts ?? row?.cantidadProductos ?? 0;
+
+    try {
+      const res = await deleteSupplierSmart(id, { fallbackCount });
+      if (res.action === "hard") {
+        // Borrado definitivo
+        setItems(prev => prev.filter(s => s.id !== id));
+        setMsg({
+          open: true,
+          type: "success",
+          title: "Proveedor eliminado",
+          message: "El proveedor se eliminó definitivamente (no tenía productos asociados)."
+        });
+      } else {
+        // Soft delete (desactivado)
+        setItems(prev =>
+          prev.map(s => s.id === id ? { ...s, status: "Desactivado", estado: false } : s)
+        );
+        setMsg({
+          open: true,
+          type: "info",
+          title: "Proveedor desactivado",
+          message: "El proveedor tiene productos asociados, por lo que se desactivó."
+        });
+      }
+    } catch (err) {
+      console.error("Error al eliminar/desactivar proveedor:", err);
+      setMsg({
+        open: true,
+        type: "error",
+        title: "No se pudo eliminar",
+        message: err?.response?.data?.message || err.message || "Ocurrió un error al intentar eliminar/desactivar el proveedor."
       });
     }
   };
 
-  const cancelDeactivate = () => setConfirm({ open: false, id: null });
+  const cancelRemove = () => setConfirm({ open: false, id: null });
   const closeMsg = () => setMsg(m => ({ ...m, open: false }));
 
   // Nuevo Proveedor (form limpio)
@@ -169,21 +190,21 @@ const handleSubmit = async (supplier) => {
         <SuppliersList
           suppliers={items}
           onEdit={editSupplier}
-          onRemove={askDeactivate}  // 🔹 ahora abre confirmación
+          onRemove={askRemove}   // ⬅️ ahora dispara eliminación inteligente
         />
       </section>
 
-      {/* 🔹 Modal de confirmación */}
+      {/* Modal de confirmación de ELIMINAR (inteligente) */}
       {confirm.open && (
         <ConfirmModal
-          title="Desactivar proveedor"
-          message="¿Seguro que deseas desactivar este proveedor? Si tiene productos asociados, se mantendrá el vínculo pero el proveedor quedará inactivo."
-          onConfirm={confirmDeactivate}
-          onCancel={cancelDeactivate}
+          title="Eliminar proveedor"
+          message="¿Deseas eliminar este proveedor? Si tiene productos asociados, no se borrará definitivamente: se desactivará para mantener la integridad."
+          onConfirm={confirmRemove}
+          onCancel={cancelRemove}
         />
       )}
 
-      {/* 🔹 Modal de mensaje (éxito / error) */}
+      {/* Modal de mensaje (éxito / error / info) */}
       {msg.open && (
         <MessageModal
           title={msg.title}
