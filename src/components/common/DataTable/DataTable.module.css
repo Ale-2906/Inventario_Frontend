@@ -1,0 +1,119 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scrollX {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;          /* Necesario para que el ellipsis funcione de forma estable */
+  min-width: 680px;             /* Evita que columnas se aplasten demasiado */
+}
+
+th, td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+th {
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+  color: #374151;
+  background: #f9fafb;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.right { text-align: right; }
+
+.evenRow { background: #ffffff; }
+.oddRow  { background: #fcfcfd; }
+
+.empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 24px 12px;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noTruncate {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.unconstrained {
+  overflow: visible !important;  /* útil para botones/menús en acciones */
+  white-space: normal !important;
+}
+
+/* Paginación */
+.pagerBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.pagerInfo {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.pager {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pagerBtn {
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  min-width: 32px;
+}
+
+.pagerBtn:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.active {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
+}
+
+.pageNums {
+  display: flex;
+  gap: 4px;
+}
+
+.pageItem {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.dots {
+  padding: 6px 8px;
+  color: #6b7280;
+}

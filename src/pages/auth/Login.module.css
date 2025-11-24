@@ -1,0 +1,90 @@
+.screen{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:32px;
+  background:
+    radial-gradient(800px 400px at 70% -10%, rgba(255,122,127,.18), transparent 60%),
+    radial-gradient(600px 300px at 10% 110%, rgba(52,192,255,.16), transparent 60%),
+    var(--bg);
+}
+
+/* Forzar que el formulario y card sean más grandes */
+.screen form {
+  width: 100%;
+  max-width: 400px;  /* Controla el ancho del card aquí */
+}
+
+/* Card del login */
+:global(.card){
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  padding:32px !important;  /* Más espacioso */
+  width: 100% !important;
+}
+
+:global(.title){font-weight:800;color:var(--text)}
+
+/* Inputs */
+:global(.label){color:var(--text)}
+:global(.input){
+  height:44px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fff;
+  color:var(--text);
+}
+:global(.input:focus){border-color:var(--brand-blue);box-shadow:0 0 0 6px rgba(52,192,255,.15)}
+
+/* Botón principal - Elige UNA de estas opciones */
+
+/* OPCIÓN 1: Azul cielo suave */
+.cta{
+  border:0 !important;
+  color:#fff !important;
+  background: #1D6BA8 !important;  /* Azul cielo sólido */
+  box-shadow:0 8px 20px rgba(14, 165, 233, .3) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.cta:hover:not(:disabled){
+  background: rgb(20, 83, 131) !important;  /* Azul más oscuro al hover */
+  transform: translateY(-1px);
+  box-shadow:0 10px 25px rgba(14, 165, 233, .35) !important;
+}
+
+.cta:disabled {
+  background: #94a3b8 !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+.eyeBtn{width:36px;height:36px;border-radius:8px;border:0;background:#f3f4f6;display:grid;place-items:center;cursor:pointer;transition:background 0.2s}
+.eyeBtn:hover{background:#e7e9ee}
+.eyeIcon{width:19px;height:19px;fill:#111}
+.logoWrap{text-align:center;margin-bottom:8px}
+.logo{width:200px;height:auto; margin-bottom: 10px;}
+.appTitle{margin:0;font-size:px;font-weight:800;color:var(--text)}
+.appSubtitle{margin:4px 0 0;color:var(--muted);font-size:16px}
+
+.forgotLink {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  color: #1D6BA8;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s;
+  text-align: right;  
+  margin-top: 12px; 
+}
+
+.forgotLink:hover {
+  color:rgb(20, 83, 131);
+  text-decoration: underline;
+}
+

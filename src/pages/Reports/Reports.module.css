@@ -1,0 +1,199 @@
+/* Reports.module.css */
+
+.headerTitle{ margin:0; font-size:28px; font-weight:800; color:#111827 }
+.headerSubtitle{ margin:4px 0 0; font-size:14px; color:#6b7280; margin-bottom: 25px;}
+
+  
+  .kpiGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  
+  @media (max-width: 1024px) {
+    .kpiGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .kpiGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .chartWrapper {
+    margin-bottom: 32px;
+  }
+  
+  .tabsCard {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+  }
+  
+  .tabsHeader {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0 24px;
+  }
+  
+  .tabsContainer {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+  
+  .tabButton {
+    padding: 16px 24px;
+    font-weight: 600;
+    font-size: 15px; /* Agrega tamaño específico */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* Fuente moderna */
+    transition: all 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent; /* Línea más gruesa */
+    letter-spacing: -0.01em; /* Espaciado más apretado */
+  }
+  
+  .tabButton:hover {
+    color: #1f2937;
+  }
+  
+  .tabButtonActive {
+    border-bottom-color: #3b82f6;
+    color: #3b82f6;
+  }
+  
+  .tabButtonInactive {
+    color: #6b7280;
+  }
+  
+  .contentCard {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+  }
+  
+  .contentHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  
+  .contentTitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f2937;
+  }
+  
+  .contentCount {
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .contentCountDanger {
+    font-size: 14px;
+    font-weight: 600;
+    color: #dc2626;
+  }
+  
+  .contentCountSuccess {
+    font-size: 14px;
+    font-weight: 600;
+    color: #16a34a;
+  }
+  
+  .emptyState {
+    text-align: center;
+    padding: 48px 0;
+    color: #6b7280;
+  }
+  
+  .emptyStateSuccess {
+    text-align: center;
+    padding: 48px 0;
+    color: #16a34a;
+  }
+  
+  .loadingContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f9fafb;
+  }
+  
+  .loadingContent {
+    text-align: center;
+  }
+  
+  .spinner {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    border: 2px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-bottom: 16px;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .loadingText {
+    font-size: 20px;
+    color: #6b7280;
+  }
+  
+  .cambioPositivo {
+    color: #16a34a;
+    font-weight: 600;
+  }
+  
+  .cambioNegativo {
+    color: #dc2626;
+    font-weight: 600;
+  }
+  
+  .stockCritico {
+    font-weight: 600;
+    color: #dc2626;
+  }
+  
+  .stockMinimo {
+    color: #6b7280;
+  }
+
+  .exportButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .exportButton:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .exportButton:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
